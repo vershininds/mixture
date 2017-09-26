@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">mixture(VIPER sample)</string>
+    <string name="activity_details_label">Details screen</string>
+</resources>
