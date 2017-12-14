@@ -1,5 +1,6 @@
 package com.vershininds.mixture.rxinteractor;
 
+
 import android.support.annotation.CallSuper;
 
 import java.util.ArrayList;

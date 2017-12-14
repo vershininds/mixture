@@ -15,7 +15,7 @@
 
         <variable
             name="actionHandler"
-            type="com.drextended.actionhandler.listener.ActionClickListener" />
+            type="com.example.viper.presentation.common.dbadapter.listener.ActionClickListener" />
 
     </data>
 

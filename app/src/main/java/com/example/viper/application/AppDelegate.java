@@ -1,6 +1,6 @@
 package com.example.viper.application;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.example.viper.application.assembly.AppComponent;
 import com.example.viper.application.assembly.AppModule;
@@ -13,7 +13,7 @@ import com.example.viper.presentation.FeatureDeclaration;
 import com.example.viper.presentation.PresentationComponents;
 
 
-public class AppDelegate extends Application {
+public class AppDelegate extends MultiDexApplication {
 
     private static AppDelegate mInstance;
 

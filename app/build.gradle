@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,6 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -30,32 +30,34 @@ android {
 }
 
 dependencies {
-    compile project(':mixturelib')
-    compile project(':rxinteractor')
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-beta5'
+    implementation project(':mixturelib')
+    implementation project(':rxinteractor')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
 
-    compile ('com.drextended.rvdatabinding:rvdatabinding:1.1.0') {
-//        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    implementation ('com.hannesdorfmann:adapterdelegates2:2.0.1'){
+        exclude group: 'com.android.support'
     }
 
-    compile "org.parceler:parceler-api:$rootProject.ext.parceler"
+    implementation "org.parceler:parceler-api:$rootProject.ext.parceler"
     annotationProcessor "org.parceler:parceler:$rootProject.ext.parceler"
 
-    compile 'org.greenrobot:eventbus:3.0.0'
+    implementation 'org.greenrobot:eventbus:3.0.0'
 
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.dagger"
-    compile "com.google.dagger:dagger:$rootProject.ext.dagger"
-    provided 'javax.annotation:jsr250-api:1.0'
+    implementation "com.google.dagger:dagger:$rootProject.ext.dagger"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
 
-    compile "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
-    compile "io.reactivex:rxjava:$rootProject.ext.rxjava"
+    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
+    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
 
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation 'com.android.support:multidex:1.0.2'
+
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }

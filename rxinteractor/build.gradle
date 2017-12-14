@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -8,25 +9,47 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0"
+        versionName rootProject.ext.rxinteractorVersion
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+publish {
+    groupId = rootProject.ext.groupId
+    artifactId = rootProject.ext.mainArtifactId + '-rxinteractor'
+    publishVersion = rootProject.ext.rxinteractorVersion
+    desc = 'Interactor on RxJava'
+    licences = ['Apache-2.0']
+    uploadName='RxInteractor'
+    website = 'https://github.com/vershininds/mixture'
 }
 
 dependencies {
-    compile project(":mixturelib")
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":mixturelib")
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
-    compile "io.reactivex:rxjava:$rootProject.ext.rxjava"
+    implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
 
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
+//    implementation ("com.github.vershininds:mixture:$rootProject.ext.mixturelibVersion"){
+//        exclude group: 'com.android.support', module: 'appcompat-v7'
+//    }
+
+    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
+    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
+
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
 }

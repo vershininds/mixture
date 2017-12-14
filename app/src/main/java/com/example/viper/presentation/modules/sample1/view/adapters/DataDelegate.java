@@ -4,15 +4,15 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.drextended.actionhandler.listener.ActionClickListener;
-import com.drextended.rvdatabinding.adapter.BindingHolder;
-import com.drextended.rvdatabinding.delegate.ActionAdapterDelegate;
 
 import java.util.List;
 
 import com.example.viper.R;
 import com.example.viper.data.SampleObject;
 import com.example.viper.databinding.ItemDataBinding;
+import com.example.viper.presentation.common.dbadapter.adapter.BindingHolder;
+import com.example.viper.presentation.common.dbadapter.delegate.ActionAdapterDelegate;
+import com.example.viper.presentation.common.dbadapter.listener.ActionClickListener;
 
 
 public class DataDelegate extends ActionAdapterDelegate<SampleObject, ItemDataBinding> {

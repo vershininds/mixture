@@ -10,14 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.drextended.actionhandler.listener.ActionClickListener;
-import com.drextended.rvdatabinding.ListConfig;
-import com.drextended.rvdatabinding.adapter.BindableAdapter;
 import com.example.viper.BR;
 import com.example.viper.R;
 import com.example.viper.application.AppDelegate;
 import com.example.viper.data.SampleObject;
 import com.example.viper.databinding.FragmentSample1Binding;
+import com.example.viper.presentation.common.dbadapter.ListConfig;
+import com.example.viper.presentation.common.dbadapter.adapter.BindableAdapter;
+import com.example.viper.presentation.common.dbadapter.listener.ActionClickListener;
 import com.example.viper.presentation.modules.sample1.assembly.Sample1Component;
 import com.example.viper.presentation.modules.sample1.assembly.Sample1DaggerModule;
 import com.example.viper.presentation.modules.sample1.contract.Sample1VmContract;
@@ -91,18 +91,11 @@ public class Sample1Fragment extends AbstractFragment<Sample1VmContract.ViewMode
         @Override
         public void onPropertyChanged(Observable observable, int i) {
             Sample1VmContract.ViewModel vm = (Sample1VmContract.ViewModel) observable;
-            switch (i) {
-                case BR.data: {
-                    mAdapter.setItems(vm.getData());
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                }
-                case BR.error: {
-                    mBinding.txtError.setText(vm.getError());
-                    break;
-                }
-                default:
-                    break;
+            if (i == BR.data) {
+                mAdapter.setItems(vm.getData());
+                mAdapter.notifyDataSetChanged();
+            } else if (i == BR.error) {
+                mBinding.txtError.setText(vm.getError());
             }
         }
     };
