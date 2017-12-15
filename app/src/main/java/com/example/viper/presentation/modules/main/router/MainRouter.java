@@ -8,8 +8,8 @@ import javax.inject.Inject;
 import com.example.viper.R;
 import com.example.viper.data.SampleObject;
 import com.example.viper.presentation.modules.main.contract.MainRouterContract;
-import com.example.viper.presentation.modules.sample1.Sample1ModuleInput;
-import com.example.viper.presentation.modules.sample2.Sample2ModuleInput;
+import com.example.viper.presentation.modules.rx2interactor.SampleRx2ModuleInput;
+import com.example.viper.presentation.modules.rxinteractor.SampleRxModuleInput;
 import com.vershininds.mixture.router.AbstractRouter;
 import com.vershininds.mixture.view.AndroidComponent;
 
@@ -17,13 +17,13 @@ import com.vershininds.mixture.view.AndroidComponent;
 public class MainRouter extends AbstractRouter<MainRouterContract.Presenter>
         implements MainRouterContract.Router {
 
-    private final Sample1ModuleInput sample1ModuleInput;
-    private final Sample2ModuleInput sample2ModuleInput;
+    private final SampleRxModuleInput sampleRxModuleInput;
+    private final SampleRx2ModuleInput sampleRx2ModuleInput;
 
     @Inject
-    public MainRouter(Sample1ModuleInput sample1ModuleInput, Sample2ModuleInput sample2ModuleInput) {
-        this.sample1ModuleInput = sample1ModuleInput;
-        this.sample2ModuleInput = sample2ModuleInput;
+    public MainRouter(SampleRxModuleInput sampleRxModuleInput, SampleRx2ModuleInput sampleRx2ModuleInput) {
+        this.sampleRxModuleInput = sampleRxModuleInput;
+        this.sampleRx2ModuleInput = sampleRx2ModuleInput;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MainRouter extends AbstractRouter<MainRouterContract.Presenter>
         FragmentManager fragmentManager = androidComponent.getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, sample1ModuleInput.createFragment())
+                .replace(R.id.container, sampleRxModuleInput.createFragment())
                 .commit();
     }
 
@@ -40,7 +40,7 @@ public class MainRouter extends AbstractRouter<MainRouterContract.Presenter>
         FragmentManager fragmentManager = androidComponent.getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, sample2ModuleInput.createFragment())
+                .replace(R.id.container, sampleRx2ModuleInput.createFragment())
                 .commit();
     }
 

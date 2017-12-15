@@ -11,7 +11,7 @@
             name="itemData"
             type="com.example.viper.data.SampleObject" />
 
-        <import type="com.example.viper.presentation.modules.sample1.view.adapters.ActionType" />
+        <import type="com.example.viper.presentation.modules.rxinteractor.view.adapters.ActionType" />
 
         <variable
             name="actionHandler"
