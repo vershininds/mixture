@@ -1,0 +1,51 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName rootProject.ext.rx2interactorVersion
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+publish {
+    groupId = rootProject.ext.groupId
+    artifactId = rootProject.ext.mainArtifactId + '-rx2interactor'
+    publishVersion = rootProject.ext.rx2interactorVersion
+    desc = 'Interactor on RxJava2'
+    licences = ['Apache-2.0']
+    uploadName='Rx2Interactor'
+    website = 'https://github.com/vershininds/mixture'
+}
+
+dependencies {
+    implementation project(":mixturelib")
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxandroid2"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxjava2"
+
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
+}

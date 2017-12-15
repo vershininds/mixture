@@ -1,5 +1,7 @@
 package com.example.viper.domain.services;
 
+import com.example.viper.data.SampleObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,8 +10,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import com.example.viper.data.SampleObject;
+import io.reactivex.Single;
 import rx.Observable;
+
 
 public class DataService {
 
@@ -18,7 +21,26 @@ public class DataService {
 
     }
 
+
+    /**
+     * rx2 method
+     *
+     * @return random data list as Observable
+     */
     public Observable<List<SampleObject>> obtainData(){
+        return Observable.just(randomData()).delay(10, TimeUnit.SECONDS);//delay emulate long load
+    }
+
+    /**
+     * rx2 method
+     *
+     * @return random data list as Single the Reactive Pattern
+     */
+    public Single<List<SampleObject>> obtainDataRx2(){
+        return Single.just(randomData()).delay(10, TimeUnit.SECONDS);//delay emulate long load
+    }
+
+    private List<SampleObject> randomData(){
         List<SampleObject> data = new ArrayList<>();
 
         int min = 25;
@@ -35,6 +57,6 @@ public class DataService {
             data.add(sampleObject);
         }
 
-        return Observable.just(data).delay(10, TimeUnit.SECONDS);//delay emulate long load
+        return data;
     }
 }

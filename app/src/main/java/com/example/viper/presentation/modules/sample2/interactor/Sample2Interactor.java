@@ -3,13 +3,14 @@ package com.example.viper.presentation.modules.sample2.interactor;
 import com.example.viper.data.SampleObject;
 import com.example.viper.domain.services.ServiceMaker;
 import com.example.viper.presentation.modules.sample2.contract.Sample2InteractorContract;
-import com.vershininds.mixture.rxinteractor.AbstractInteractor;
+import com.vershininds.mixture.rx2interactor.AbstractInteractor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Single;
 
 public class Sample2Interactor extends AbstractInteractor<Sample2InteractorContract.Presenter>
         implements Sample2InteractorContract.Interactor {
@@ -25,17 +26,17 @@ public class Sample2Interactor extends AbstractInteractor<Sample2InteractorContr
 
     @Override
     public void obtainData() {
-        Observable<List<SampleObject>> observable = mServiceMaker.getDataService().obtainData();
+        Single<List<SampleObject>> observable = mServiceMaker.getDataService().obtainDataRx2();
 
-        execute(observable, new ResultFactory<List<SampleObject>, Sample2InteractorContract.Presenter>() {
+        execute(observable.toObservable(), new Callback<List<SampleObject>, Sample2InteractorContract.Presenter>() {
             @Override
-            public PendingResult<List<SampleObject>, Sample2InteractorContract.Presenter> create(List<SampleObject> data, Throwable throwable) {
-                return new PendingResult<List<SampleObject>, Sample2InteractorContract.Presenter>(data, throwable) {
-                    public void deliver(Sample2InteractorContract.Presenter target) {
-                        List<SampleObject> result = getData();
-                        target.onObtainedData(result, getError());
-                    }
-                };
+            public void onResult(List<SampleObject> data, Sample2InteractorContract.Presenter target) {
+                target.onObtainedData(data, null);
+            }
+
+            @Override
+            public void onError(Throwable throwable, Sample2InteractorContract.Presenter target) {
+                target.onObtainedData(new ArrayList<>(), throwable);
             }
         });
     }
