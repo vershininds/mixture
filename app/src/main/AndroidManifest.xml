@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.viper">
+    package="com.vershininds.mixture.sample">
 
     <application
-        android:name="com.example.viper.application.AppDelegate"
+        android:name="com.vershininds.mixture.sample.application.AppDelegate"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.viper.presentation.modules.main.view.MainActivity">
+        <activity android:name="com.vershininds.mixture.sample.presentation.modules.main.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,12 +19,12 @@
         </activity>
 
         <activity
-            android:name="com.example.viper.presentation.modules.details.view.DetailsActivity"
+            android:name="com.vershininds.mixture.sample.presentation.modules.details.view.DetailsActivity"
             android:label="@string/activity_details_label"
-            android:parentActivityName="com.example.viper.presentation.modules.main.view.MainActivity">
+            android:parentActivityName="com.vershininds.mixture.sample.presentation.modules.main.view.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.viper.presentation.modules.main.view.MainActivity" />
+                android:value="com.vershininds.mixture.sample.presentation.modules.main.view.MainActivity" />
         </activity>
     </application>
 

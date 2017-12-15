@@ -9,13 +9,13 @@
 
         <variable
             name="itemData"
-            type="com.example.viper.data.SampleObject" />
+            type="com.vershininds.mixture.sample.data.SampleObject" />
 
-        <import type="com.example.viper.presentation.modules.rxinteractor.view.adapters.ActionType" />
+        <import type="com.vershininds.mixture.sample.presentation.modules.rxinteractor.view.adapters.ActionType" />
 
         <variable
             name="actionHandler"
-            type="com.example.viper.presentation.common.dbadapter.listener.ActionClickListener" />
+            type="com.vershininds.mixture.sample.presentation.common.dbadapter.listener.ActionClickListener" />
 
     </data>
 

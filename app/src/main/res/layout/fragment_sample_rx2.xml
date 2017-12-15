@@ -8,11 +8,11 @@
 
         <import
             alias="State"
-            type="com.example.viper.presentation.modules.rx2interactor.contract.SampleRx2VmContract.State" />
+            type="com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2VmContract.State" />
 
         <variable
             name="viewModel"
-            type="com.example.viper.presentation.modules.rx2interactor.contract.SampleRx2VmContract.ViewModel" />
+            type="com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2VmContract.ViewModel" />
     </data>
 
     <FrameLayout
