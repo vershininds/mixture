@@ -2,12 +2,16 @@ package com.vershininds.mixture.presenter;
 
 import android.support.annotation.CallSuper;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import com.vershininds.mixture.view.AndroidComponent;
 import com.vershininds.mixture.viewmodel.MvpViewModel;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
+/**
+ * Presenter with base functionality
+ * @param <VM> {@link MvpViewModel}
+ */
 public abstract class AbstractPresenter<VM extends MvpViewModel>
         implements MvpPresenter<VM> {
 
@@ -54,6 +58,12 @@ public abstract class AbstractPresenter<VM extends MvpViewModel>
         return component;
     }
 
+    /**
+     * This method checks the view availability.
+     * Perform an action on the view if view available.
+     * Else the action will be cached and executed after view attached.
+     * @param action {@link Action}
+     */
     protected void applyAction(Action action) {
         AndroidComponent component = getAndroidComponent();
         if (component != null) {

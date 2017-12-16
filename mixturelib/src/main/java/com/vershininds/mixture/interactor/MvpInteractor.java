@@ -1,5 +1,10 @@
 package com.vershininds.mixture.interactor;
 
+/**
+ * Base interactor interface.
+ * Interactor contains all the business logic required for module.
+ * @param <L> {@link Listener} target class who get operation result from interactor
+ */
 public interface MvpInteractor<L extends MvpInteractor.Listener> {
     enum State {
         WORKING,
@@ -8,10 +13,21 @@ public interface MvpInteractor<L extends MvpInteractor.Listener> {
 
     interface Listener {}
 
+    /**
+     * @return {@link State} interactor, is working or idle
+     */
     State getState();
+
+    /**
+     * @param listener {@link Listener} target class who get operation result from interactor
+     */
     void setListener(L listener);
-    void destroy();
+
+    /**
+     * abort current job (load)
+     */
     void reset();
+    void destroy();
 
     abstract class PendingResult<T, L> {
         private final T data;
