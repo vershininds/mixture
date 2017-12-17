@@ -33,9 +33,12 @@ ext {
     // publish
     groupId = 'com.github.vershininds'
     mainArtifactId = 'mixture'
-    mixturelibVersion = '0.1.0'
-    rxinteractorVersion = '0.1.0'
-    rx2interactorVersion = '0.1.0'
+    mixturelibVersion = '0.1.1'
+    mixturelibCodeVersion = 2
+    rxinteractorVersion = mixturelibVersion
+    rxinteractorCodeVersion = mixturelibCodeVersion
+    rx2interactorVersion = mixturelibVersion
+    rx2interactorCodeVersion = mixturelibCodeVersion
     website = 'https://github.com/vershininds/mixture'
 
 
