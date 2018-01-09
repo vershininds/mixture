@@ -12,7 +12,8 @@ public interface MainVmContract {
     enum State {
         INITIAL,
         SAMPLE_1,
-        SAMPLE_2
+        SAMPLE_2,
+        SAMPLE_LIFECYCLE,
     }
 
     interface ViewModel extends MvpViewModel {
@@ -24,5 +25,6 @@ public interface MainVmContract {
     interface Presenter extends MvpPresenter<ViewModel> {
         void showSample1();
         void showSample2();
+        void showSampleLifecycle();
     }
 }

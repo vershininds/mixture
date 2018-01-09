@@ -7,10 +7,10 @@ import javax.inject.Inject;
 import com.vershininds.mixture.sample.presentation.modules.rx2interactor.view.SampleRx2Fragment;
 
 
-public class SampleRxRx2Module implements SampleRx2ModuleInput {
+public class SampleRx2Module implements SampleRx2ModuleInput {
 
     @Inject
-    public SampleRxRx2Module() {
+    public SampleRx2Module() {
     }
 
     @Override

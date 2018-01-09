@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.vershininds.mixture.router.AbstractRouter;
 import com.vershininds.mixture.sample.R;
 import com.vershininds.mixture.sample.data.SampleObject;
+import com.vershininds.mixture.sample.presentation.modules.lifecycle.SampleLifecycleModuleInput;
 import com.vershininds.mixture.sample.presentation.modules.main.contract.MainRouterContract;
 import com.vershininds.mixture.sample.presentation.modules.rx2interactor.SampleRx2ModuleInput;
 import com.vershininds.mixture.sample.presentation.modules.rxinteractor.SampleRxModuleInput;
@@ -18,11 +19,14 @@ public class MainRouter extends AbstractRouter<MainRouterContract.Presenter>
 
     private final SampleRxModuleInput sampleRxModuleInput;
     private final SampleRx2ModuleInput sampleRx2ModuleInput;
+    private final SampleLifecycleModuleInput sampleLifecycleModuleInput;
 
     @Inject
-    public MainRouter(SampleRxModuleInput sampleRxModuleInput, SampleRx2ModuleInput sampleRx2ModuleInput) {
+    public MainRouter(SampleRxModuleInput sampleRxModuleInput, SampleRx2ModuleInput sampleRx2ModuleInput,
+                      SampleLifecycleModuleInput sampleLifecycleModuleInput) {
         this.sampleRxModuleInput = sampleRxModuleInput;
         this.sampleRx2ModuleInput = sampleRx2ModuleInput;
+        this.sampleLifecycleModuleInput = sampleLifecycleModuleInput;
     }
 
     @Override
@@ -40,6 +44,15 @@ public class MainRouter extends AbstractRouter<MainRouterContract.Presenter>
 
         fragmentManager.beginTransaction()
                 .replace(R.id.container, sampleRx2ModuleInput.createFragment())
+                .commit();
+    }
+
+    @Override
+    public void showSampleLifecycleScreen(AndroidComponent androidComponent) {
+        FragmentManager fragmentManager = androidComponent.getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, sampleLifecycleModuleInput.createFragment())
                 .commit();
     }
 

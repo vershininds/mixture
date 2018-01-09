@@ -4,4 +4,6 @@
         android:title="Sample RxJava1"/>
     <item android:id="@+id/menu_item_sample2"
         android:title="Sample RxJava2"/>
+    <item android:id="@+id/menu_item_sample_lifecycle"
+        android:title="Sample android component Lifecycle"/>
 </menu>

@@ -76,6 +76,9 @@ public class MainActivity extends AbstractActivity<MainVmContract.ViewModel, Mai
             case R.id.menu_item_sample2:
                 getPresenter().showSample2();
                 break;
+            case R.id.menu_item_sample_lifecycle:
+                getPresenter().showSampleLifecycle();
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }

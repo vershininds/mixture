@@ -12,6 +12,7 @@ public interface MainRouterContract {
     interface Router extends MvpRouter<Presenter> {
         void showSample1Screen(AndroidComponent androidComponent);
         void showSample2Screen(AndroidComponent androidComponent);
+        void showSampleLifecycleScreen(AndroidComponent androidComponent);
         void showDetailScreen(AndroidComponent androidComponent, SampleObject object);
     }
 }

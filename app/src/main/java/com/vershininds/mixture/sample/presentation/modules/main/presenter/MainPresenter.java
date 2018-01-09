@@ -1,11 +1,11 @@
 package com.vershininds.mixture.sample.presentation.modules.main.presenter;
 
-import javax.inject.Inject;
-
-import com.vershininds.mixture.sample.presentation.modules.main.contract.MainVmContract;
-import com.vershininds.mixture.sample.presentation.modules.main.contract.MainRouterContract;
 import com.vershininds.mixture.presenter.AbstractPresenter;
+import com.vershininds.mixture.sample.presentation.modules.main.contract.MainRouterContract;
+import com.vershininds.mixture.sample.presentation.modules.main.contract.MainVmContract;
 import com.vershininds.mixture.view.AndroidComponent;
+
+import javax.inject.Inject;
 
 public class MainPresenter extends AbstractPresenter<MainVmContract.ViewModel>
         implements MainVmContract.Presenter {
@@ -30,14 +30,10 @@ public class MainPresenter extends AbstractPresenter<MainVmContract.ViewModel>
             default:
                 break;
         }
-
-//        EventBus.getDefault().register(this);
     }
 
     @Override
     public void detachView() {
-//        EventBus.getDefault().unregister(this);
-
         super.detachView();
     }
 
@@ -60,6 +56,14 @@ public class MainPresenter extends AbstractPresenter<MainVmContract.ViewModel>
         }
     }
 
+    @Override
+    public void showSampleLifecycle() {
+        MainVmContract.ViewModel vm = getViewModel();
+        if(vm.getState() != MainVmContract.State.SAMPLE_LIFECYCLE) {
+            applyAction(component -> router.showSampleLifecycleScreen(component));
+            applyAction(component -> vm.setState(MainVmContract.State.SAMPLE_LIFECYCLE));
+        }
+    }
 //    @Subscribe
 //    public void onItemSelected(final Sample2ModuleInput.ItemSelectedEvent event) {
 //        router.showDetailScreen(getAndroidComponent(), event.data);
