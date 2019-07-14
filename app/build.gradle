@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -30,6 +33,12 @@ android {
     dataBinding {
         enabled true
     }
+
+    kapt {
+        javacOptions {
+            option("-Xmaxerrs", 500)
+        }
+    }
 }
 
 dependencies {
@@ -46,11 +55,11 @@ dependencies {
     }
 
     implementation "org.parceler:parceler-api:$rootProject.ext.parceler"
-    annotationProcessor "org.parceler:parceler:$rootProject.ext.parceler"
+    kapt "org.parceler:parceler:$rootProject.ext.parceler"
 
     implementation 'org.greenrobot:eventbus:3.0.0'
 
-    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.dagger"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger"
     implementation "com.google.dagger:dagger:$rootProject.ext.dagger"
     compileOnly 'javax.annotation:jsr250-api:1.0'
 
@@ -63,4 +72,5 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
