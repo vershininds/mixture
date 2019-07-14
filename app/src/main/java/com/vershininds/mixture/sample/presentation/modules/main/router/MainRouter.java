@@ -8,7 +8,6 @@ import com.vershininds.mixture.sample.R;
 import com.vershininds.mixture.sample.data.SampleObject;
 import com.vershininds.mixture.sample.presentation.modules.main.contract.MainRouterContract;
 import com.vershininds.mixture.sample.presentation.modules.rx2interactor.SampleRx2ModuleInput;
-import com.vershininds.mixture.sample.presentation.modules.rxinteractor.SampleRxModuleInput;
 import com.vershininds.mixture.view.AndroidComponent;
 
 import javax.inject.Inject;
@@ -16,22 +15,16 @@ import javax.inject.Inject;
 public class MainRouter extends AbstractRouter<MainRouterContract.Presenter>
         implements MainRouterContract.Router {
 
-    private final SampleRxModuleInput sampleRxModuleInput;
     private final SampleRx2ModuleInput sampleRx2ModuleInput;
 
     @Inject
-    public MainRouter(SampleRxModuleInput sampleRxModuleInput, SampleRx2ModuleInput sampleRx2ModuleInput) {
-        this.sampleRxModuleInput = sampleRxModuleInput;
+    public MainRouter(SampleRx2ModuleInput sampleRx2ModuleInput) {
         this.sampleRx2ModuleInput = sampleRx2ModuleInput;
     }
 
     @Override
     public void showSample1Screen(AndroidComponent androidComponent) {
-        FragmentManager fragmentManager = androidComponent.getSupportFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, sampleRxModuleInput.createFragment())
-                .commit();
+        //TODO: show sample screen
     }
 
     @Override

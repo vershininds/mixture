@@ -11,7 +11,7 @@
             name="itemData"
             type="com.vershininds.mixture.sample.data.SampleObject" />
 
-        <import type="com.vershininds.mixture.sample.presentation.modules.rxinteractor.view.adapters.ActionType" />
+        <import type="com.vershininds.mixture.sample.presentation.modules.rx2interactor.view.adapters.ActionType" />
 
         <variable
             name="actionHandler"

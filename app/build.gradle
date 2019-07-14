@@ -34,7 +34,6 @@ android {
 
 dependencies {
     implementation project(':mixturelib')
-    implementation project(':rxinteractor')
     implementation project(':rx2interactor')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
@@ -54,9 +53,6 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.dagger"
     implementation "com.google.dagger:dagger:$rootProject.ext.dagger"
     compileOnly 'javax.annotation:jsr250-api:1.0'
-
-    implementation "io.reactivex:rxandroid:$rootProject.ext.rxandroid"
-    implementation "io.reactivex:rxjava:$rootProject.ext.rxjava"
 
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxandroid2"
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxjava2"

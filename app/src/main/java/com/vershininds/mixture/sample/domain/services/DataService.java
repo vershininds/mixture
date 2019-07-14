@@ -11,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import io.reactivex.Single;
-import rx.Observable;
 
 
 public class DataService {
@@ -19,16 +18,6 @@ public class DataService {
     @Inject
     public DataService(){
 
-    }
-
-
-    /**
-     * rx2 method
-     *
-     * @return random data list as Observable
-     */
-    public Observable<List<SampleObject>> obtainData(){
-        return Observable.just(randomData()).delay(10, TimeUnit.SECONDS);//delay emulate long load
     }
 
     /**
