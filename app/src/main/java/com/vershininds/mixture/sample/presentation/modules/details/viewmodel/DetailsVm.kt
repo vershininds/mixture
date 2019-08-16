@@ -14,17 +14,17 @@ import javax.inject.Inject
 class DetailsVm @Inject constructor(
         private val interactor: DetailsInteractorContract.Interactor,
         private val sampleObject: SampleObject
-) : BaseVm(), DetailsVmContract.ViewModel, DetailsInteractorContract.Presenter {
+) : BaseVm(), DetailsVmContract.ViewModel, DetailsInteractorContract.ViewModel {
 
     private var viewData : DetailsViewData
 
     init {
         viewData = DetailsViewData(sampleObject)
-        interactor.setListener(this)
+        interactor.listener = this
     }
 
     override fun onCleared() {
-        interactor.setListener(null)
+        interactor.listener = null
         interactor.destroy()
 
         super.onCleared()

@@ -1,10 +1,8 @@
 package com.vershininds.mixture.sample.presentation.modules.details.contract
 
-import com.vershininds.mixture.interactor.MvpInteractor
+import com.vershininds.mixture.interactor.MxtInteractor
 
 interface DetailsInteractorContract {
-
-    interface Presenter : MvpInteractor.Listener
-
-    interface Interactor : MvpInteractor<Presenter>
+    interface ViewModel : MxtInteractor.Listener
+    interface Interactor : MxtInteractor<ViewModel>
 }

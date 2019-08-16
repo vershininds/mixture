@@ -14,17 +14,17 @@ import javax.inject.Inject
 
 class CatalogVm @Inject constructor(
         private val interactor: CatalogInteractorContract.Interactor
-) : BaseVm(), CatalogVmContract.ViewModel, CatalogInteractorContract.Presenter {
+) : BaseVm(), CatalogVmContract.ViewModel, CatalogInteractorContract.ViewModel {
 
     private var viewData : CatalogViewData
 
     init {
         viewData = CatalogViewData()
-        interactor.setListener(this)
+        interactor.listener = this
     }
 
     override fun onCleared() {
-        interactor.setListener(null)
+        interactor.listener = null
         interactor.destroy()
 
         super.onCleared()
