@@ -11,12 +11,13 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.mixturelibCodeVersion
-        versionName rootProject.ext.mixturelibVersion
+        versionCode rootProject.ext.mngtaskCodeVersion
+        versionName rootProject.ext.mngtaskVersion
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -32,30 +33,27 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    dataBinding {
-        enabled true
-    }
 }
 
 publish {
     groupId = rootProject.ext.groupId
-    artifactId = rootProject.ext.mainArtifactId
-    publishVersion = rootProject.ext.mixturelibVersion
-    desc = 'Base classes for create VIPER architecture in android project.'
+    artifactId = rootProject.ext.mainArtifactId + '-mngtask'
+    publishVersion = rootProject.ext.mngtaskVersion
+    desc = 'Manageable tasks'
     licences = ['Apache-2.0']
-    uploadName='Mixture'
-    website = rootProject.ext.website
+    uploadName='MngTasks'
+    website = 'https://github.com/vershininds/mixture'
 }
 
 dependencies {
+    implementation project(":mixturelib")
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+
     implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
 
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxandroid2"
+    implementation "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxjava2"
+
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

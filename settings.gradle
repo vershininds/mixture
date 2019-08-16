@@ -1,1 +1,1 @@
-include ':app', ':mixturelib', ':rx2interactor'
+include ':app', ':mixturelib', ':mngtask'

@@ -37,10 +37,8 @@ ext {
     mainArtifactId = 'mixture'
     mixturelibVersion = '0.2.0'
     mixturelibCodeVersion = 3
-    rxinteractorVersion = mixturelibVersion
-    rxinteractorCodeVersion = mixturelibCodeVersion
-    rx2interactorVersion = mixturelibVersion
-    rx2interactorCodeVersion = mixturelibCodeVersion
+    mngtaskVersion = mixturelibVersion
+    mngtaskCodeVersion = mixturelibCodeVersion
     website = 'https://github.com/vershininds/mixture'
 
 
@@ -49,6 +47,7 @@ ext {
     targetSdkVersion = 28
     compileSdkVersion = 28
     buildToolsVersion = '28.0.3'
+    javaVersion = JavaVersion.VERSION_1_8
 
     // App dependencies
     supportLibraryVersion = '28.0.0'

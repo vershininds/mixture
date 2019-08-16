@@ -26,9 +26,14 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility rootProject.ext.javaVersion
+        targetCompatibility rootProject.ext.javaVersion
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 
     dataBinding {
         enabled true
@@ -43,7 +48,7 @@ android {
 
 dependencies {
     implementation project(':mixturelib')
-    implementation project(':rx2interactor')
+    implementation project(':mngtask')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"

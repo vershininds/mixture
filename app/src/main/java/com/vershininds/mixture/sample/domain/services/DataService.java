@@ -26,7 +26,7 @@ public class DataService {
      * @return random data list as Single the Reactive Pattern
      */
     public Single<List<SampleObject>> obtainDataRx2(){
-        return Single.just(randomData()).delay(10, TimeUnit.SECONDS);//delay emulate long load
+        return Single.fromCallable(this::randomData).delay(10, TimeUnit.SECONDS);//delay emulate long load
     }
 
     private List<SampleObject> randomData(){
