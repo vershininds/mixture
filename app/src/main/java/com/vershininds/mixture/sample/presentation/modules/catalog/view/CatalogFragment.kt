@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import com.vershininds.mixture.action.ViewAction
 import com.vershininds.mixture.action.handle
 import com.vershininds.mixture.action.subscribe
-import com.vershininds.mixture.router.MviRouter
+import com.vershininds.mixture.router.MxtRouter
 import com.vershininds.mixture.sample.R
 import com.vershininds.mixture.sample.application.AppDelegate
 import com.vershininds.mixture.sample.data.SampleObject
@@ -50,7 +50,7 @@ class CatalogFragment : Fragment(), AndroidComponent, ActionClickListener {
     private lateinit var adapter: BindableAdapter<List<SampleObject>>
 
     @Inject
-    internal lateinit var router: MviRouter<CatalogRouterContract.TypeRouterAction>
+    internal lateinit var router: MxtRouter<MxtRouter.Listener, CatalogRouterContract.TypeRouterAction>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

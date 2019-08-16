@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import com.vershininds.mixture.sample.R
 import com.vershininds.mixture.sample.application.AppDelegate
 import com.vershininds.mixture.sample.databinding.ActivityMainBinding
+import com.vershininds.mixture.sample.presentation.modules.main.contract.MainRouterContract
 import com.vershininds.mixture.sample.presentation.modules.main.di.MainComponent
 import com.vershininds.mixture.sample.presentation.modules.main.di.MainDiModule
-import com.vershininds.mixture.sample.presentation.modules.main.contract.MainRouterContract
 import com.vershininds.mixture.view.AndroidComponent
 import javax.inject.Inject
 

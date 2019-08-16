@@ -1,13 +1,13 @@
 package com.vershininds.mixture.sample.presentation.modules.details.router
 
-import com.vershininds.mixture.router.AbstractRouter
-import com.vershininds.mixture.router.MvpRouter
+import com.vershininds.mixture.router.MxtRouter
 import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsRouterContract
 import com.vershininds.mixture.view.AndroidComponent
 import javax.inject.Inject
 
-class DetailsRouter @Inject constructor() :
-        AbstractRouter<MvpRouter.Listener>(), DetailsRouterContract.Router {
+class DetailsRouter @Inject constructor() : DetailsRouterContract.Router {
+
+    override var listener: MxtRouter.Listener? = null
 
     override fun actionHandler(androidComponent: AndroidComponent, action: DetailsRouterContract.TypeRouterAction) {
         when (action) {

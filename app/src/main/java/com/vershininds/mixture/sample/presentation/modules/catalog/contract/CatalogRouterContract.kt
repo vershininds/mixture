@@ -2,8 +2,7 @@ package com.vershininds.mixture.sample.presentation.modules.catalog.contract;
 
 
 import com.vershininds.mixture.action.RouterAction
-import com.vershininds.mixture.router.MviRouter
-import com.vershininds.mixture.router.MvpRouter
+import com.vershininds.mixture.router.MxtRouter
 import com.vershininds.mixture.sample.data.SampleObject
 import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract.Router
 import com.vershininds.mixture.view.AndroidComponent
@@ -26,7 +25,7 @@ interface CatalogRouterContract {
         class DetailsScreenAction(val params: DetailsParams) : TypeRouterAction()
     }
 
-    interface Router : MvpRouter<MvpRouter.Listener>, MviRouter<TypeRouterAction> {
+    interface Router : MxtRouter<MxtRouter.Listener, TypeRouterAction> {
         /**
          * @param androidComponent [AndroidComponent]
          */

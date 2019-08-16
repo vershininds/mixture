@@ -1,6 +1,6 @@
 package com.vershininds.mixture.sample.presentation.modules.catalog.di
 
-import com.vershininds.mixture.router.MviRouter
+import com.vershininds.mixture.router.MxtRouter
 import com.vershininds.mixture.sample.presentation.assembly.PerFeatureScope
 import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogInteractorContract
 import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract
@@ -17,5 +17,5 @@ class CatalogDiModule {
 
     @PerFeatureScope
     @Provides
-    fun providesRouter(router: CatalogRouter): MviRouter<CatalogRouterContract.TypeRouterAction> = router
+    fun providesRouter(router: CatalogRouter): MxtRouter<MxtRouter.Listener, CatalogRouterContract.TypeRouterAction> = router
 }

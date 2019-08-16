@@ -1,6 +1,6 @@
 package com.vershininds.mixture.sample.presentation.modules.details.di
 
-import com.vershininds.mixture.router.MviRouter
+import com.vershininds.mixture.router.MxtRouter
 import com.vershininds.mixture.sample.presentation.assembly.PerFeatureScope
 import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsInteractorContract
 import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsRouterContract
@@ -17,5 +17,5 @@ class DetailsDiModule {
 
     @PerFeatureScope
     @Provides
-    fun providesRouter(router: DetailsRouter): MviRouter<DetailsRouterContract.TypeRouterAction> = router
+    fun providesRouter(router: DetailsRouter): MxtRouter<MxtRouter.Listener, DetailsRouterContract.TypeRouterAction> = router
 }

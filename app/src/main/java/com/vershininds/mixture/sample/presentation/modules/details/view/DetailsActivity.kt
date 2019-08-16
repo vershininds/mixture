@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import com.vershininds.mixture.action.ViewAction
 import com.vershininds.mixture.action.handle
 import com.vershininds.mixture.action.subscribe
-import com.vershininds.mixture.router.MviRouter
+import com.vershininds.mixture.router.MxtRouter
 import com.vershininds.mixture.sample.R
 import com.vershininds.mixture.sample.application.AppDelegate
 import com.vershininds.mixture.sample.data.SampleObject
@@ -31,7 +31,7 @@ class DetailsActivity : AppCompatActivity(), AndroidComponent {
     private var binding: ActivityDetailsBinding? = null
 
     @Inject
-    internal lateinit var router: MviRouter<DetailsRouterContract.TypeRouterAction>
+    internal lateinit var router: MxtRouter<MxtRouter.Listener, DetailsRouterContract.TypeRouterAction>
 
     companion object {
 
