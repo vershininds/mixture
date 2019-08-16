@@ -1,9 +1,9 @@
 package com.vershininds.mixture.sample.presentation.modules.rx2interactor.interactor;
 
+import com.vershininds.mixture.rx2interactor.AbstractInteractor;
 import com.vershininds.mixture.sample.data.SampleObject;
 import com.vershininds.mixture.sample.domain.services.ServiceMaker;
 import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2InteractorContract;
-import com.vershininds.mixture.rx2interactor.AbstractInteractor;
 
 import java.util.ArrayList;
 import java.util.List;

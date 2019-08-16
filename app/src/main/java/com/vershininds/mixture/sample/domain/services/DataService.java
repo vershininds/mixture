@@ -39,9 +39,10 @@ public class DataService {
         int i = r.nextInt(max - min + 1) + min;
 
         for (int j = 0; j < i; j++){
-            SampleObject sampleObject = new SampleObject();
-            sampleObject.setName("name_" + String.valueOf(j));
-            sampleObject.setDescription("desc_" + UUID.randomUUID().toString());
+            SampleObject sampleObject = new SampleObject(
+                    "name_" + String.valueOf(j),
+                    "desc_" + UUID.randomUUID().toString()
+            );
 
             data.add(sampleObject);
         }

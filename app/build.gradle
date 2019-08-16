@@ -49,13 +49,11 @@ dependencies {
     implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
 
     implementation ('com.hannesdorfmann:adapterdelegates2:2.0.1'){
         exclude group: 'com.android.support'
     }
-
-    implementation "org.parceler:parceler-api:$rootProject.ext.parceler"
-    kapt "org.parceler:parceler:$rootProject.ext.parceler"
 
     implementation 'org.greenrobot:eventbus:3.0.0'
 
