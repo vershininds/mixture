@@ -5,8 +5,8 @@ import com.vershininds.mixture.sample.presentation.modules.details.di.DetailsCom
 import com.vershininds.mixture.sample.presentation.modules.details.di.DetailsDiModule;
 import com.vershininds.mixture.sample.presentation.modules.main.di.MainComponent;
 import com.vershininds.mixture.sample.presentation.modules.main.di.MainDiModule;
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.di.SampleRx2Component;
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.di.SampleRx2DiModule;
+import com.vershininds.mixture.sample.presentation.modules.catalog.di.CatalogComponent;
+import com.vershininds.mixture.sample.presentation.modules.catalog.di.CatalogDiModule;
 
 import dagger.Component;
 
@@ -15,6 +15,5 @@ import dagger.Component;
 public interface PresentationComponents {
     MainComponent mainComponent(MainDiModule mainDiModule);
     DetailsComponent detailsComponent(DetailsDiModule detailsDiModule);
-
-    SampleRx2Component sample2Component(SampleRx2DiModule sampleRx2DiModule);
+    CatalogComponent catalogComponent(CatalogDiModule catalogDiModule);
 }

@@ -1,4 +1,4 @@
-package com.vershininds.mixture.sample.presentation.modules.rx2interactor.view
+package com.vershininds.mixture.sample.presentation.modules.catalog.view
 
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -16,58 +16,58 @@ import com.vershininds.mixture.router.MviRouter
 import com.vershininds.mixture.sample.R
 import com.vershininds.mixture.sample.application.AppDelegate
 import com.vershininds.mixture.sample.data.SampleObject
-import com.vershininds.mixture.sample.databinding.FragmentSampleRx2Binding
+import com.vershininds.mixture.sample.databinding.FragmentCatalogBinding
 import com.vershininds.mixture.sample.presentation.common.dbadapter.ListConfig
 import com.vershininds.mixture.sample.presentation.common.dbadapter.adapter.BindableAdapter
 import com.vershininds.mixture.sample.presentation.common.dbadapter.listener.ActionClickListener
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2RouterContract
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2VmContract
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.di.SampleRx2Component
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.di.SampleRx2DiModule
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.view.adapters.ActionType
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.view.adapters.DataDelegate
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.viewmodel.SampleRx2Vm
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.viewmodel.SampleRx2VmFactory
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogVmContract
+import com.vershininds.mixture.sample.presentation.modules.catalog.di.CatalogComponent
+import com.vershininds.mixture.sample.presentation.modules.catalog.di.CatalogDiModule
+import com.vershininds.mixture.sample.presentation.modules.catalog.view.adapters.ActionType
+import com.vershininds.mixture.sample.presentation.modules.catalog.view.adapters.DataDelegate
+import com.vershininds.mixture.sample.presentation.modules.catalog.viewmodel.CatalogVm
+import com.vershininds.mixture.sample.presentation.modules.catalog.viewmodel.CatalogVmFactory
 import com.vershininds.mixture.view.AndroidComponent
 import com.vershininds.mixture.viewmodel.DataModel
 import javax.inject.Inject
 
-class SampleRx2Fragment : Fragment(), AndroidComponent, ActionClickListener {
+class CatalogFragment : Fragment(), AndroidComponent, ActionClickListener {
 
 
     companion object {
 
-        val TAG = SampleRx2Fragment::class.java.simpleName
+        val TAG = CatalogFragment::class.java.simpleName
 
         fun newInstance(): Fragment {
-            return SampleRx2Fragment()
+            return CatalogFragment()
         }
     }
 
-    private lateinit var diComponent: SampleRx2Component
-    private lateinit var vm: SampleRx2Vm
-    private lateinit var binding: FragmentSampleRx2Binding
+    private lateinit var diComponent: CatalogComponent
+    private lateinit var vm: CatalogVm
+    private lateinit var binding: FragmentCatalogBinding
     private lateinit var adapter: BindableAdapter<List<SampleObject>>
 
     @Inject
-    internal lateinit var router: MviRouter<SampleRx2RouterContract.TypeRouterAction>
+    internal lateinit var router: MviRouter<CatalogRouterContract.TypeRouterAction>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         diComponent = AppDelegate.get()
                 .presentationComponents()
-                .sample2Component(SampleRx2DiModule())
-                .apply { inject(this@SampleRx2Fragment) }
+                .catalogComponent(CatalogDiModule())
+                .apply { inject(this@CatalogFragment) }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_sample_rx2, container, false)
+            inflater.inflate(R.layout.fragment_catalog, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = DataBindingUtil.bind<FragmentSampleRx2Binding>(view)!!
+        binding = DataBindingUtil.bind<FragmentCatalogBinding>(view)!!
 
         adapter = BindableAdapter(DataDelegate(this))
 
@@ -82,10 +82,10 @@ class SampleRx2Fragment : Fragment(), AndroidComponent, ActionClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val vmFactory = SampleRx2VmFactory(diComponent.getInteractor())
+        val vmFactory = CatalogVmFactory(diComponent.getInteractor())
 
         vm = ViewModelProviders.of(this, vmFactory)
-                .get(SampleRx2Vm::class.java)
+                .get(CatalogVm::class.java)
                 .apply { restoreInstanceState(savedInstanceState) }
 
         observeAction(vm)
@@ -105,11 +105,11 @@ class SampleRx2Fragment : Fragment(), AndroidComponent, ActionClickListener {
         }
     }
 
-    private fun observeAction(model: SampleRx2Vm) {
+    private fun observeAction(model: CatalogVm) {
         model.actionDispatcher.subscribe(viewLifecycleOwner) { action ->
             when (action) {
                 is ViewAction -> handleViewAction(action)
-                is SampleRx2RouterContract.TypeRouterAction -> handleRouterAction(action)
+                is CatalogRouterContract.TypeRouterAction -> handleRouterAction(action)
             }
         }
     }
@@ -117,14 +117,14 @@ class SampleRx2Fragment : Fragment(), AndroidComponent, ActionClickListener {
     private fun handleViewAction(action: ViewAction) {
         action.handle {
             when (it) {
-                is SampleRx2VmContract.TypeViewAction.DataAction -> handleDataAction(it)
-/*                is SampleRx2VmContract.TypeViewAction.ErrorDialogWithCustomMessageAction ->
+                is CatalogVmContract.TypeViewAction.DataAction -> handleDataAction(it)
+/*                is CatalogVmContract.TypeViewAction.ErrorDialogWithCustomMessageAction ->
                     showErrorDialog(it.errorMsg)*/
             }
         }
     }
 
-    private fun handleDataAction(action: SampleRx2VmContract.TypeViewAction.DataAction) {
+    private fun handleDataAction(action: CatalogVmContract.TypeViewAction.DataAction) {
         val dataModel = action.data
 
         val state = dataModel.state
@@ -143,7 +143,7 @@ class SampleRx2Fragment : Fragment(), AndroidComponent, ActionClickListener {
         }
     }
 
-    private fun handleRouterAction(action: SampleRx2RouterContract.TypeRouterAction) {
+    private fun handleRouterAction(action: CatalogRouterContract.TypeRouterAction) {
         action.handle { router.actionHandler(this, it) }
     }
 }

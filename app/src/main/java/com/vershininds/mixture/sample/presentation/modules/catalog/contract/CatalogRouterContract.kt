@@ -1,11 +1,11 @@
-package com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract;
+package com.vershininds.mixture.sample.presentation.modules.catalog.contract;
 
 
 import com.vershininds.mixture.action.RouterAction
 import com.vershininds.mixture.router.MviRouter
 import com.vershininds.mixture.router.MvpRouter
 import com.vershininds.mixture.sample.data.SampleObject
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2RouterContract.Router
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract.Router
 import com.vershininds.mixture.view.AndroidComponent
 
 
@@ -13,7 +13,7 @@ import com.vershininds.mixture.view.AndroidComponent
  * Contract between [ViewModel] and [Router]
  */
 
-interface SampleRx2RouterContract {
+interface CatalogRouterContract {
 
     /**
      * It's only sample how post more than one parameter in router

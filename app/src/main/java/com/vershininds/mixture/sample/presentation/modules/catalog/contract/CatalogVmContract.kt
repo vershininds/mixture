@@ -1,10 +1,10 @@
-package com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract
+package com.vershininds.mixture.sample.presentation.modules.catalog.contract
 
 import com.vershininds.mixture.action.ViewAction
 import com.vershininds.mixture.sample.data.SampleObject
 import com.vershininds.mixture.viewmodel.DataModel
 
-interface SampleRx2VmContract {
+interface CatalogVmContract {
 
     sealed class TypeViewAction : ViewAction() {
         class DataAction(val data: DataModel<List<SampleObject>, String>) : TypeViewAction()

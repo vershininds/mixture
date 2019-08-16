@@ -1,4 +1,4 @@
-package com.vershininds.mixture.sample.presentation.modules.rx2interactor.view.adapters;
+package com.vershininds.mixture.sample.presentation.modules.catalog.view.adapters;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;

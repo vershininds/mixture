@@ -1,17 +1,17 @@
-package com.vershininds.mixture.sample.presentation.modules.rx2interactor.viewmodel
+package com.vershininds.mixture.sample.presentation.modules.catalog.viewmodel
 
 import android.os.Parcel
 import com.vershininds.mixture.helper.ParcelableExt
 import com.vershininds.mixture.sample.data.SampleObject
 
-class SampleRx2ViewData() : ParcelableExt {
+class CatalogViewData() : ParcelableExt {
 
     var sampleObjectList: List<SampleObject> = emptyList()
     var error: String? = null
 
     companion object {
         @JvmField
-        val CREATOR = ParcelableExt.parcelableCreator(::SampleRx2ViewData)
+        val CREATOR = ParcelableExt.parcelableCreator(::CatalogViewData)
     }
 
     private constructor(p: Parcel) : this() {

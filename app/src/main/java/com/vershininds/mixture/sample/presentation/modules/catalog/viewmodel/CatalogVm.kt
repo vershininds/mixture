@@ -1,25 +1,25 @@
-package com.vershininds.mixture.sample.presentation.modules.rx2interactor.viewmodel
+package com.vershininds.mixture.sample.presentation.modules.catalog.viewmodel
 
 import android.os.Bundle
 import android.os.Parcelable
 import com.vershininds.mixture.sample.data.SampleObject
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2InteractorContract
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2RouterContract
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2RouterContract.TypeRouterAction
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2VmContract
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.contract.SampleRx2VmContract.TypeViewAction
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogInteractorContract
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract.TypeRouterAction
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogVmContract
+import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogVmContract.TypeViewAction
 import com.vershininds.mixture.viewmodel.BaseVm
 import com.vershininds.mixture.viewmodel.DataModel
 import javax.inject.Inject
 
-class SampleRx2Vm @Inject constructor(
-        private val interactor: SampleRx2InteractorContract.Interactor
-) : BaseVm(), SampleRx2VmContract.ViewModel, SampleRx2InteractorContract.Presenter {
+class CatalogVm @Inject constructor(
+        private val interactor: CatalogInteractorContract.Interactor
+) : BaseVm(), CatalogVmContract.ViewModel, CatalogInteractorContract.Presenter {
 
-    private var viewData : SampleRx2ViewData
+    private var viewData : CatalogViewData
 
     init {
-        viewData = SampleRx2ViewData()
+        viewData = CatalogViewData()
         interactor.setListener(this)
     }
 
@@ -43,7 +43,7 @@ class SampleRx2Vm @Inject constructor(
     public override fun restoreInstanceState(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) loadData()
         else {
-            val data = savedInstanceState.getParcelable<Parcelable>(KEY_DATA) as SampleRx2ViewData?
+            val data = savedInstanceState.getParcelable<Parcelable>(KEY_DATA) as CatalogViewData?
             data?.let {
                 viewData = it
                 postActionDispatcher(TypeViewAction.DataAction(DataModel(data = it.sampleObjectList, state = DataModel.State.DATA)))
@@ -54,7 +54,7 @@ class SampleRx2Vm @Inject constructor(
 
     override fun clickOnItem(sampleObject: SampleObject) {
         postActionDispatcher(TypeRouterAction.DetailsScreenAction(
-                SampleRx2RouterContract.DetailsParams(sampleObject))
+                CatalogRouterContract.DetailsParams(sampleObject))
         )
     }
 

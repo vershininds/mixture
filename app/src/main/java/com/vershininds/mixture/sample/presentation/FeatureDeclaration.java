@@ -2,8 +2,8 @@ package com.vershininds.mixture.sample.presentation;
 
 import com.vershininds.mixture.sample.presentation.modules.details.DetailsModule;
 import com.vershininds.mixture.sample.presentation.modules.details.DetailsModuleContract;
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.SampleRx2Module;
-import com.vershininds.mixture.sample.presentation.modules.rx2interactor.SampleRx2ModuleContract;
+import com.vershininds.mixture.sample.presentation.modules.catalog.CatalogModule;
+import com.vershininds.mixture.sample.presentation.modules.catalog.CatalogModuleContract;
 
 import dagger.Module;
 import dagger.Provides;
@@ -19,7 +19,7 @@ public class FeatureDeclaration {
 
     @PerPresentationLayerScope
     @Provides
-    public SampleRx2ModuleContract providesSample2Module(SampleRx2Module sampleRx2Module) {
-        return sampleRx2Module;
+    public CatalogModuleContract providesCatalogModule(CatalogModule catalogModule) {
+        return catalogModule;
     }
 }
