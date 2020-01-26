@@ -3,6 +3,7 @@ package com.vershininds.mixture.sample.domain.services;
 import com.vershininds.mixture.sample.data.SampleObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -20,13 +21,29 @@ public class DataService {
 
     }
 
+    public enum LoadType {
+        NORMAL, EMPTY_DATA, ERROR_DATA
+    }
+
     /**
-     * rx2 method
+     * rx method
      *
      * @return random data list as Single the Reactive Pattern
      */
-    public Single<List<SampleObject>> obtainDataRx2(){
-        return Single.fromCallable(this::randomData).delay(10, TimeUnit.SECONDS);//delay emulate long load
+    public Single<List<SampleObject>> obtainDataRx(LoadType type){
+        Single<List<SampleObject>> observable;
+
+        switch (type){
+            case EMPTY_DATA:
+                observable = Single.just(Collections.<SampleObject>emptyList());
+                break;
+            case ERROR_DATA:
+                observable = Single.error(new Throwable("Test error: Some error while loading data"));
+                break;
+            default:
+                observable = Single.fromCallable(this::randomData);
+        }
+        return observable.delay(10, TimeUnit.SECONDS);//delay emulate long load
     }
 
     private List<SampleObject> randomData(){
@@ -40,7 +57,7 @@ public class DataService {
 
         for (int j = 0; j < i; j++){
             SampleObject sampleObject = new SampleObject(
-                    "name_" + String.valueOf(j),
+                    "name_" + j,
                     "desc_" + UUID.randomUUID().toString()
             );
 

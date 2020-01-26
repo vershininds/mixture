@@ -1,18 +1,16 @@
 package com.vershininds.mixture.sample.presentation.modules.catalog.view
 
-import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.DefaultItemAnimator
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import com.vershininds.mixture.dispatcher.ActionDispatcher
 import com.vershininds.mixture.action.ViewAction
 import com.vershininds.mixture.action.handle
-import com.vershininds.mixture.action.subscribe
-import com.vershininds.mixture.router.MxtRouter
+import com.vershininds.mixture.dispatcher.subscribeView
+import com.vershininds.mixture.router.manageBy
 import com.vershininds.mixture.sample.R
 import com.vershininds.mixture.sample.application.AppDelegate
 import com.vershininds.mixture.sample.data.SampleObject
@@ -20,54 +18,41 @@ import com.vershininds.mixture.sample.databinding.FragmentCatalogBinding
 import com.vershininds.mixture.sample.presentation.common.dbadapter.ListConfig
 import com.vershininds.mixture.sample.presentation.common.dbadapter.adapter.BindableAdapter
 import com.vershininds.mixture.sample.presentation.common.dbadapter.listener.ActionClickListener
-import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogRouterContract
 import com.vershininds.mixture.sample.presentation.modules.catalog.contract.CatalogVmContract
 import com.vershininds.mixture.sample.presentation.modules.catalog.di.CatalogComponent
-import com.vershininds.mixture.sample.presentation.modules.catalog.di.CatalogDiModule
 import com.vershininds.mixture.sample.presentation.modules.catalog.view.adapters.ActionType
 import com.vershininds.mixture.sample.presentation.modules.catalog.view.adapters.DataDelegate
 import com.vershininds.mixture.sample.presentation.modules.catalog.viewmodel.CatalogVm
-import com.vershininds.mixture.sample.presentation.modules.catalog.viewmodel.CatalogVmFactory
 import com.vershininds.mixture.view.AndroidComponent
 import com.vershininds.mixture.viewmodel.DataModel
-import javax.inject.Inject
+import com.vershininds.mixture.viewmodel.ViewState
+
 
 class CatalogFragment : Fragment(), AndroidComponent, ActionClickListener {
 
 
     companion object {
-
-        val TAG = CatalogFragment::class.java.simpleName
-
         fun newInstance(): Fragment {
             return CatalogFragment()
         }
     }
 
     private lateinit var diComponent: CatalogComponent
-    private lateinit var vm: CatalogVm
+    private val vm: CatalogVm by lazy { diComponent.getViewModel() }
+    private val dispatcher: ActionDispatcher by lazy { diComponent.getDispatcher() }
     private lateinit var binding: FragmentCatalogBinding
     private lateinit var adapter: BindableAdapter<List<SampleObject>>
 
-    @Inject
-    internal lateinit var router: MxtRouter<MxtRouter.Listener, CatalogRouterContract.TypeRouterAction>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        diComponent = AppDelegate.get()
-                .presentationComponents()
-                .catalogComponent(CatalogDiModule())
-                .apply { inject(this@CatalogFragment) }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = inflater.inflate(R.layout.fragment_catalog, container, false)
+        setHasOptionsMenu(true)
+        return view
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-            inflater.inflate(R.layout.fragment_catalog, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding = DataBindingUtil.bind<FragmentCatalogBinding>(view)!!
+        binding = DataBindingUtil.bind(view)!!
 
         adapter = BindableAdapter(DataDelegate(this))
 
@@ -77,22 +62,48 @@ class CatalogFragment : Fragment(), AndroidComponent, ActionClickListener {
                 .setDefaultDividerEnabled(true)
                 .build(activity)
                 .applyConfig(activity, binding.rvData)
+
+        binding.btnRetry.setOnClickListener {
+            dispatcher.dispatch(CatalogVmContract.TypeUserAction.RetryAction())
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val vmFactory = CatalogVmFactory(diComponent.getInteractor())
+        diComponent = AppDelegate.get()
+                .presentationComponents()
+                .catalogComponentFactory()
+                .create(this)
+                .apply { inject(this@CatalogFragment) }
+        diComponent.getRouter().manageBy(viewLifecycleOwner)
+        vm.restoreInstanceState(savedInstanceState)
 
-        vm = ViewModelProviders.of(this, vmFactory)
-                .get(CatalogVm::class.java)
-                .apply { restoreInstanceState(savedInstanceState) }
-
-        observeAction(vm)
+        observeAction()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(vm.saveInstanceState(outState))
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_catalog, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.item_error_catalog -> {
+                dispatcher.dispatch(CatalogVmContract.TypeUserAction.LoadErrorListAction())
+                return true
+            }
+            R.id.item_empty_catalog -> {
+                dispatcher.dispatch(CatalogVmContract.TypeUserAction.LoadEmptyListAction())
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun getSupportFragmentManager(): FragmentManager? {
@@ -101,49 +112,44 @@ class CatalogFragment : Fragment(), AndroidComponent, ActionClickListener {
 
     override fun onActionClick(view: View, actionType: String, model: Any) {
         when (actionType) {
-            ActionType.CLICK -> vm.clickOnItem(model as SampleObject)
+            ActionType.CLICK -> dispatcher.dispatch(
+                    CatalogVmContract.TypeUserAction.ClickOnItemAction(model as SampleObject)
+            )
         }
     }
 
-    private fun observeAction(model: CatalogVm) {
-        model.actionDispatcher.subscribe(viewLifecycleOwner) { action ->
-            when (action) {
-                is ViewAction -> handleViewAction(action)
-                is CatalogRouterContract.TypeRouterAction -> handleRouterAction(action)
-            }
-        }
-    }
-
-    private fun handleViewAction(action: ViewAction) {
-        action.handle {
-            when (it) {
-                is CatalogVmContract.TypeViewAction.DataAction -> handleDataAction(it)
+    private fun observeAction() {
+        dispatcher.subscribeView(viewLifecycleOwner) { action: ViewAction ->
+            action.handle {
+                when (it) {
+                    is CatalogVmContract.TypeViewAction.DataAction -> handleDataAction(it)
 /*                is CatalogVmContract.TypeViewAction.ErrorDialogWithCustomMessageAction ->
                     showErrorDialog(it.errorMsg)*/
+                }
             }
         }
     }
 
     private fun handleDataAction(action: CatalogVmContract.TypeViewAction.DataAction) {
         val dataModel = action.data
-
-        val state = dataModel.state
-        binding.state = state
-
-        when (state) {
-            DataModel.State.LOADING -> { /*nop*/
+        when (dataModel.state) {
+            DataModel.State.LOADING -> {
+                binding.state = ViewState.LOADING
             }
             DataModel.State.ERROR -> {
+                binding.state = ViewState.ERROR
                 binding.txtError.text = dataModel.error
             }
             DataModel.State.DATA -> {
-                adapter.items = dataModel.data
+                val data = dataModel.data
+                if (data.isNullOrEmpty()) {
+                    binding.state = ViewState.EMPTY
+                } else {
+                    binding.state = ViewState.DATA
+                }
+                adapter.items = data
                 adapter.notifyDataSetChanged()
             }
         }
-    }
-
-    private fun handleRouterAction(action: CatalogRouterContract.TypeRouterAction) {
-        action.handle { router.actionHandler(this, it) }
     }
 }

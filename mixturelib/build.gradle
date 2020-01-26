@@ -53,6 +53,10 @@ dependencies {
     api "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
 
+    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger"
+    implementation "com.google.dagger:dagger:$rootProject.ext.dagger"
+    compileOnly 'javax.annotation:jsr250-api:1.0'
+
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'

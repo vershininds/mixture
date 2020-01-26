@@ -1,4 +1,4 @@
-package com.vershininds.mixture.action
+package com.vershininds.mixture.dispatcher
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
@@ -6,8 +6,14 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Looper
 import android.support.annotation.MainThread
-import com.vershininds.mixture.action.ActionDispatcher.Subscriber
+import com.vershininds.mixture.action.RetentiveAction
+import com.vershininds.mixture.dispatcher.ActionDispatcher.Subscriber
+import com.vershininds.mixture.logger.Logger
+import com.vershininds.mixture.logger.LoggerDefault
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
+
+typealias SubscriberMap = ConcurrentHashMap<String, Subscriber>
 
 /**
  * ActionDispatcher has a similar ideology with [LiveData].
@@ -27,7 +33,9 @@ import java.util.*
  * activities and fragments where they can safely observe LiveData and not worry about leaks:
  * they will be instantly unsubscribed when they are destroyed.
  */
-class ActionDispatcher {
+class ActionDispatcher(
+        private val logger: Logger = LoggerDefault()
+) {
 
     /**
      * A simple callback that can receive from [ActionDispatcher].
@@ -40,18 +48,26 @@ class ActionDispatcher {
         fun onAction(action: RetentiveAction)
     }
 
+    private var enabledLogTrace = true
+
     // how many subscribers are in active state
     private var activeCount = 0
     private var subWrapper : SubscriberWrapper? = null
     // exclude chatter subscriber
     private var storeVersion = -1
 
+    private val subscribers = SubscriberMap()
+
     private val storeRepeatedAction = mutableMapOf<Class<out RetentiveAction>, RetentiveAction>()
     private val actionQueue = ArrayDeque<RetentiveAction>()
 
 
+    fun enableLogTrace(enable: Boolean) {
+        enabledLogTrace = enable
+    }
+
     /**
-     * Dispatch the value. If there are active subscribers, the value will be dispatched to them.
+     * Dispatch the value. If dispatcher contains active subscribers, the value will be dispatched to them.
      * Else the action will be stored in queue and dispatch when the active subscriber appears.
      *
      * If subscriber not mark action as has been handled,
@@ -59,7 +75,7 @@ class ActionDispatcher {
      *
      * This method must be called from the main thread.
      *
-     * @param action The new action
+     * @param action The new action [RetentiveAction]
      */
     @MainThread
     fun dispatch(action: RetentiveAction){
@@ -119,20 +135,61 @@ class ActionDispatcher {
         }
 
         owner.lifecycle.addObserver(lcObserver)
+        logSubscribe("WithLifecycle")
+    }
+
+
+    /**
+     * Adds the subscriber without the lifespan of the owner.
+     * This subscriber will be alive while live dispatcher.
+     *
+     * @param tag
+     * @param subscriber The subscriber that will receive the events
+     */
+    @MainThread
+    fun subscribe(tag : String, subscriber : Subscriber) {
+        assertMainThread("subscribe")
+
+        subscribers[tag] = subscriber
+        logSubscribe(tag)
     }
 
     /**
-     * Remove current subscriber.
+     * Remove the given subscriber within the lifespan of the current owner.
      */
     @MainThread
-    fun removeSubscriber() {
-        assertMainThread("removeSubscriber")
+    fun removeLifecycleSubscriber() {
+        assertMainThread("removeLifecycleSubscriber")
 
         subWrapper?.let {
             it.detachSubscriber()
             it.activeStateChanged(false)
         }
         subWrapper = null
+        logUnsubscribe("WithLifecycle")
+    }
+
+    /**
+     * Remove simple subscriber by tag.
+     */
+    @MainThread
+    fun removeSubscriber(tag: String) {
+        assertMainThread("removeSubscriber")
+
+        subscribers.remove(tag)
+        logUnsubscribe(tag)
+    }
+
+    /**
+     * Remove all subscribers.
+     */
+    @MainThread
+    fun removeAllSubscribers() {
+        assertMainThread("removeAllSubscribers")
+
+        subscribers.clear()
+        removeLifecycleSubscriber()
+        logUnsubscribe("all")
     }
 
     /**
@@ -159,18 +216,18 @@ class ActionDispatcher {
     }
 
     /**
-     * Returns true if this ActionDispatcher has subscribers.
+     * Returns true if this ActionDispatcher has subscriber with lifecycle.
      *
-     * @return true if this ActionDispatcher has subscribers
+     * @return true if this ActionDispatcher has subscriber with lifecycle
      */
     fun hasSubscriber(): Boolean {
         return subWrapper != null
     }
 
     /**
-     * Returns true if this ActionDispatcher has active subscriber.
+     * Returns true if this ActionDispatcher has active subscriber with lifecycle.
      *
-     * @return true if this ActionDispatcher has active subscriber
+     * @return true if this ActionDispatcher has active subscriber with lifecycle.
      */
     fun hasActiveSubscriber(): Boolean {
         return activeCount > 0
@@ -182,6 +239,7 @@ class ActionDispatcher {
         dispatchQueueAction()
     }
 
+    //FIXME: ConcurrentModification at com.vershininds.mixture.action.ActionDispatcher.dispatchRepeatedAction(ActionDispatcher.kt:244)
     private fun dispatchRepeatedAction(){
         val storeIterator = storeRepeatedAction.iterator()
         while (storeIterator.hasNext()) {
@@ -209,10 +267,10 @@ class ActionDispatcher {
     }
 
     private fun notify(action: RetentiveAction) : Boolean {
-        return notifySubscriber(subWrapper, action)
+        return notifySubscribers(subWrapper, subscribers, action)
     }
 
-    private fun notifySubscriber(subWrapper: SubscriberWrapper?, action: RetentiveAction) : Boolean {
+    private fun notifySubscribers(subWrapper: SubscriberWrapper?, simpleSubscribers: SubscriberMap, action: RetentiveAction) : Boolean {
         if (subWrapper == null || !subWrapper.isActive) {
             return false
         }
@@ -229,9 +287,16 @@ class ActionDispatcher {
         if (subWrapper.lastVersion >= storeVersion) {
             return false
         }
-        subWrapper.lastVersion = storeVersion
+        subWrapper.lastVersion++
 
+        logNotify(action, "WithLifecycle")
         subWrapper.subscriber.onAction(action)
+
+        simpleSubscribers.forEach { (tag, subscriber) ->
+            logNotify(action, tag)
+            subscriber.onAction(action)
+        }
+
         return true
     }
 
@@ -254,7 +319,7 @@ class ActionDispatcher {
         @OnLifecycleEvent(Lifecycle.Event.ON_ANY)
         fun onStateChanged() {
             if (lcOwner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
-                removeSubscriber()
+                removeLifecycleSubscriber()
                 return
             }
             activeStateChanged(shouldBeActive())
@@ -305,13 +370,22 @@ class ActionDispatcher {
                     + " thread")
         }
     }
-}
 
-inline fun ActionDispatcher.subscribe(owner: LifecycleOwner, crossinline action: (action: RetentiveAction) -> Unit) {
-    subscribe(owner, object : ActionDispatcher.Subscriber {
-        override fun onAction(action: RetentiveAction) {
-            action(action)
+    private fun Logger.printIfEnabled(print: Logger.() -> Unit) {
+        if (enabledLogTrace) print()
+    }
+
+    private fun logSubscribe(subscriberTag: String) {
+        logger.printIfEnabled { log("subscribe: $subscriberTag subscriber") }
+    }
+
+    private fun logUnsubscribe(subscriberTag: String) {
+        logger.printIfEnabled { log("remove: $subscriberTag subscriber") }
+    }
+
+    private fun logNotify(action: RetentiveAction, subscriberTag: String) {
+        logger.printIfEnabled {
+            log("notify: subscriber - $subscriberTag| action - ${action.javaClass.simpleName}")
         }
-
-    })
+    }
 }

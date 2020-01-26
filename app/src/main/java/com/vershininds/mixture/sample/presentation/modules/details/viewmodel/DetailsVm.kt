@@ -2,8 +2,12 @@ package com.vershininds.mixture.sample.presentation.modules.details.viewmodel
 
 import android.os.Bundle
 import android.os.Parcelable
+import com.vershininds.mixture.dispatcher.ActionDispatcher
+import com.vershininds.mixture.action.UserAction
+import com.vershininds.mixture.action.handle
+import com.vershininds.mixture.dispatcher.subscribeVm
+import com.vershininds.mixture.interactor.MxtInteractor
 import com.vershininds.mixture.sample.data.SampleObject
-import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsInteractorContract
 import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsRouterContract.TypeRouterAction
 import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsVmContract
 import com.vershininds.mixture.sample.presentation.modules.details.contract.DetailsVmContract.TypeViewAction
@@ -12,22 +16,26 @@ import com.vershininds.mixture.viewmodel.DataModel
 import javax.inject.Inject
 
 class DetailsVm @Inject constructor(
-        private val interactor: DetailsInteractorContract.Interactor,
+        private val dispatcher: ActionDispatcher,
+        private val interactor: MxtInteractor,
         private val sampleObject: SampleObject
-) : BaseVm(), DetailsVmContract.ViewModel, DetailsInteractorContract.ViewModel {
+) : BaseVm(dispatcher) {
 
     private var viewData : DetailsViewData
 
     init {
         viewData = DetailsViewData(sampleObject)
-        interactor.listener = this
     }
 
-    override fun onCleared() {
-        interactor.listener = null
-        interactor.destroy()
+    override fun subscribeOnDispatcher() {
+        dispatcher.subscribeVm("DetailsVm",
+                { action: UserAction -> action.handle { handleUserAction(it) } }
+        )
+    }
 
-        super.onCleared()
+    override fun destroy() {
+        interactor.destroy()
+        super.destroy()
     }
 
     override fun loadData() {
@@ -50,7 +58,11 @@ class DetailsVm @Inject constructor(
         }
     }
 
-    override fun onClickFinish() {
-        postActionDispatcher(TypeRouterAction.FinishScreenAction())
+    private fun handleUserAction(action: UserAction) {
+        when (action) {
+            is DetailsVmContract.TypeUserAction.ClickOnFinishAction -> action.handle {
+                postActionDispatcher(TypeRouterAction.FinishScreenAction())
+            }
+        }
     }
 }

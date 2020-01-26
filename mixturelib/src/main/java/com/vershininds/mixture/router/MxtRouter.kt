@@ -1,20 +1,31 @@
 package com.vershininds.mixture.router
 
-import com.vershininds.mixture.action.RouterAction
-import com.vershininds.mixture.view.AndroidComponent
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.OnLifecycleEvent
+import com.vershininds.mixture.dispatcher.DispatcherSubscriber
 
-interface MxtRouter<L : MxtRouter.Listener, T : RouterAction> {
+interface MxtRouter2: DispatcherSubscriber
 
-    interface Listener
+fun MxtRouter2.manageBy(lifecycleOwner: LifecycleOwner) {
+    val observer = object : LifecycleObserver {
 
-    /**
-     * [Listener] target class who get operation result from interactor
-     */
-    var listener: L?
+        @OnLifecycleEvent(Lifecycle.Event.ON_START)
+        fun onStart() {
+            subscribeOnDispatcher()
+        }
 
-    fun destroy() {
-        listener = null
+        @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+        fun onStop() {
+            unsubscribeDispatcher()
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+        fun onDestroy() {
+            lifecycleOwner.lifecycle.removeObserver(this)
+        }
+
     }
-
-    fun actionHandler(androidComponent: AndroidComponent, action: T)
+    lifecycleOwner.lifecycle.addObserver(observer)
 }

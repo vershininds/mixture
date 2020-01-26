@@ -1,15 +1,5 @@
 package com.vershininds.mixture.interactor
 
-interface MxtInteractor<L : MxtInteractor.Listener> {
+import com.vershininds.mixture.dispatcher.DispatcherSubscriber
 
-    interface Listener
-
-    /**
-     * [Listener] target class who get operation result from interactor
-     */
-    var listener : L?
-
-    fun destroy() {
-        listener = null
-    }
-}
+interface MxtInteractor: DispatcherSubscriber

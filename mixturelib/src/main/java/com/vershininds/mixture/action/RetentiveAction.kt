@@ -1,6 +1,9 @@
 package com.vershininds.mixture.action
 
-open class RetentiveAction : VmAction {
+/**
+ * Action with mark: event was processed or not
+ */
+open class RetentiveAction {
 
     var hasBeenHandled = false
         private set // Allow external read but not write

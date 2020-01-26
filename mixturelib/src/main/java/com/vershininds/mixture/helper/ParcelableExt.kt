@@ -26,7 +26,7 @@ interface ParcelableExt : Parcelable {
                             create(source, loader)
 
                     override fun createFromParcel(source: Parcel) =
-                            createFromParcel(source, T::class.java.classLoader)
+                            createFromParcel(source, T::class.java.classLoader!!)
 
                     override fun newArray(size: Int) = arrayOfNulls<T>(size)
                 }
@@ -35,17 +35,6 @@ interface ParcelableExt : Parcelable {
 
 
 // Parcel extensions
-
-inline fun Parcel.extReadBoolean() = readInt() != 0
-
-inline fun Parcel.extWriteBoolean(value: Boolean) = writeInt(if (value) 1 else 0)
-
-inline fun <reified T : Enum<T>> Parcel.readEnum() =
-        readInt().let { if (it >= 0) enumValues<T>()[it] else null }
-
-inline fun <T : Enum<T>> Parcel.writeEnum(value: T?) =
-        writeInt(value?.ordinal ?: -1)
-
 inline fun <T> Parcel.readNullable(reader: () -> T) =
         if (readInt() != 0) reader() else null
 
@@ -57,6 +46,16 @@ inline fun <T> Parcel.writeNullable(value: T?, writer: (T) -> Unit) {
         writeInt(0)
     }
 }
+
+inline fun <reified T : Enum<T>> Parcel.readEnum() =
+        readInt().let { if (it >= 0) enumValues<T>()[it] else null }
+
+fun <T : Enum<T>> Parcel.writeEnum(value: T?) =
+        writeInt(value?.ordinal ?: -1)
+
+fun Parcel.extReadBoolean() = readInt() != 0
+
+fun Parcel.extWriteBoolean(value: Boolean) = writeInt(if (value) 1 else 0)
 
 fun Parcel.readDate() =
         readNullable { Date(readLong()) }
@@ -73,10 +72,11 @@ fun Parcel.writeBigInteger(value: BigInteger?) =
 fun Parcel.readBigDecimal() =
         readNullable { BigDecimal(BigInteger(createByteArray()), readInt()) }
 
-fun Parcel.writeBigDecimal(value: BigDecimal?) = writeNullable(value) {
-    writeByteArray(it.unscaledValue().toByteArray())
-    writeInt(it.scale())
-}
+fun Parcel.writeBigDecimal(value: BigDecimal?) =
+        writeNullable(value) {
+            writeByteArray(it.unscaledValue().toByteArray())
+            writeInt(it.scale())
+        }
 
 fun <T : Parcelable> Parcel.readTypedObjectCompat(c: Parcelable.Creator<T>) =
         readNullable { c.createFromParcel(this) }

@@ -13,7 +13,7 @@ class LoggerDefault : Logger {
     val TAG: String = LoggerDefault::class.java.simpleName
 
     override fun logError(e: Throwable) {
-        Log.e(TAG, e.localizedMessage)
+        Log.e(TAG, e.localizedMessage!!)
     }
 
     override fun log(task: Task, msg: String) {

@@ -1,15 +1,17 @@
 package com.vershininds.mixture.sample.presentation.modules.catalog.contract
 
-import com.vershininds.mixture.interactor.MxtInteractor
+import com.vershininds.mixture.action.InteractorAction
 import com.vershininds.mixture.sample.data.SampleObject
 
 interface CatalogInteractorContract {
 
-    interface ViewModel : MxtInteractor.Listener {
-        fun onObtainedData(data: List<SampleObject>, throwable: Throwable?)
+    sealed class TypeInteractorAction : InteractorAction() {
+        class ObtainDataAction : TypeInteractorAction()
+        class ObtainErrorDataAction : TypeInteractorAction()
+        class ObtainEmptyDataAction : TypeInteractorAction()
     }
 
-    interface Interactor : MxtInteractor<ViewModel> {
-        fun obtainData()
+    sealed class TypeInteractorBackAction : InteractorAction() {
+        class ObtainedDataAction(val data: List<SampleObject>, val throwable: Throwable?) : TypeInteractorBackAction()
     }
 }

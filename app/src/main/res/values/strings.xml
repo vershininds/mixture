@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">mixture</string>
     <string name="activity_details_label">Details screen</string>
+
+    <string name="menu_catalog_item_title_error">Load list with error</string>
+    <string name="menu_catalog_item_title_empty">Load empty list</string>
+
+    <string name="lbl_retry">Retry</string>
+
+    <string name="msg_empty_data">Data is empty</string>
+    <string name="msg_error_data">Error loading data</string>
 </resources>
